@@ -11,7 +11,7 @@ export class NotificationsController {
     private readonly kafkaClient: ClientKafka,
   ) {}
 
-  @Post()
+  @Post('send')
   async sendNotification(@Body() data: NotificationDto): Promise<{
     status: string;
   }> {
