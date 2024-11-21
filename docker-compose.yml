@@ -1,32 +1,34 @@
 version: '3.8'
 services:
+  # Zookeeper для управления Kafka-брокерами
   zookeeper:
-    image: 'confluentinc/cp-zookeeper:latest'
+    image: 'bitnami/zookeeper:latest'
     container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_CLIENT_PORT:-2181}
-    ports:
-      - '${ZOOKEEPER_CLIENT_PORT:-2181}:${ZOOKEEPER_CLIENT_PORT:-2181}'
-    extra_hosts:
-      - 'localhost: 127.0.0.1'
     networks:
       - kafka_network
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - '${ZOOKEEPER_CLIENT_PORT:-2181}:${ZOOKEEPER_CLIENT_PORT:-2181}'
 
+  # Kafka брокер
   kafka:
-    restart: always
-    image: 'confluentinc/cp-kafka:latest'
+    restart: unless-stopped
+    image: bitnami/kafka:latest
     container_name: kafka
+    networks:
+      - kafka_network
     depends_on:
       - zookeeper
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_CLIENT_PORT:-2181}
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_ADVERTISED_HOST:-localhost}:${KAFKA_ADVERTISED_PORT:-9092}
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: ${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR:-1}
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_CLIENT_PORT:-2181}
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${KAFKA_ADVERTISED_HOST:-kafka}:${KAFKA_ADVERTISED_PORT:-9092}
+      - ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL=0
     ports:
       - '${KAFKA_ADVERTISED_PORT:-9092}:${KAFKA_ADVERTISED_PORT:-9092}'
-    networks:
-      - kafka_network
 
   # 1 gateway application
   gateway:
@@ -65,4 +67,4 @@ services:
 
 networks:
   kafka_network:
-    driver: bridge
+    external: true

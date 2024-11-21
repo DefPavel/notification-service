@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { KafkaOptions, Transport } from '@nestjs/microservices';
+import { Partitioners } from 'kafkajs';
 
 import { CONNECTED_TOKENS } from '../common/constant';
 
@@ -20,6 +21,9 @@ export const KafkaConfigProvider = {
         },
         consumer: {
           groupId,
+        },
+        producer: {
+          createPartitioner: Partitioners.LegacyPartitioner,
         },
       },
     };
