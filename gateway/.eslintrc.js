@@ -23,7 +23,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       typescript: {
-        project: './tsconfig.json',
+        project: 'tsconfig.json',
       },
     },
   },
@@ -37,12 +37,12 @@ module.exports = {
       'error',
       {
         groups: [
-          'builtin', // Встроенные модули Node.js (fs, path и т.д.)
-          'external', // Пакеты из node_modules (react, axios и т.д.)
-          'internal', // Абсолютные импорты внутри вашего проекта (если используются alias)
-          ['parent', 'sibling', 'index'], // Импорты из родительских и соседних директорий, а также из текущей (index.js)
-          'object', // Импорты с использованием object pattern (например, { something } from './module')
-          'type', // Импорты только типов (используется с TypeScript)
+          'builtin',
+          'external',
+          'internal',
+          ['parent', 'sibling', 'index'],
+          'object',
+          'type',
         ],
         pathGroups: [
           {

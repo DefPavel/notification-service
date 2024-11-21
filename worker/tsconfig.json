@@ -1,21 +1,86 @@
 {
   "compilerOptions": {
+    // Устанавливает модульную систему CommonJS, подходящую для Node.js.
     "module": "commonjs",
+
+    // Создает файл декларации (.d.ts) для каждого файла TypeScript.
     "declaration": true,
+
+    // Удаляет комментарии из итогового JavaScript-кода.
     "removeComments": true,
+
+    // Включает генерацию метаданных для декораторов (требуется Nest.js).
     "emitDecoratorMetadata": true,
+
+    // Разрешает использование экспериментальных декораторов.
     "experimentalDecorators": true,
+
+    // Позволяет импортировать модули CommonJS с помощью `import`.
     "allowSyntheticDefaultImports": true,
+
+    // Добавляет совместимость с библиотеками CommonJS (например, `require`).
+    "esModuleInterop": true,
+
+    // Позволяет импортировать JSON-файлы.
+    "resolveJsonModule": true,
+
+    // Устанавливает версию JavaScript для компиляции. ES2021 — для современных возможностей.
     "target": "ES2021",
+
+    // Указывает библиотеки для TypeScript, такие как ES2021.
+    "lib": ["ES2021"],
+
+    // Создает source map файлы для отладки TypeScript-кода.
     "sourceMap": true,
+
+    // Указывает папку для скомпилированного кода.
     "outDir": "./dist",
+
+    // Базовый путь для настройки алиасов.
     "baseUrl": "./",
+
+    // Включает инкрементальную компиляцию для ускорения.
     "incremental": true,
+
+    // Пропускает проверку типов внутри node_modules.
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+
+    // Включает строгий режим TypeScript, объединяющий несколько строгих правил.
+    "strict": true,
+
+    // Включает строгую проверку на null/undefined значений.
+    "strictNullChecks": true,
+
+    // Требует явного указания типов для всех значений (отключено для гибкости).
+    "noImplicitAny": true,
+
+    // Проверяет соответствие типов при вызове методов.
+    "strictBindCallApply": true,
+
+    // Проверяет совместимость типов в функциях.
+    "strictFunctionTypes": true,
+
+    // Отключает проверку инициализации свойств классов (нужно для декораторов Nest.js).
+    "strictPropertyInitialization": false,
+
+    // Требует единообразного использования регистра в именах файлов.
+    "forceConsistentCasingInFileNames": true,
+
+    // Запрещает пропускать обработку кейсов в конструкции switch.
+    "noFallthroughCasesInSwitch": true,
+
+    // Гарантирует, что все ветви функции возвращают значение.
+    "noImplicitReturns": true,
+
+    // Предупреждает о неиспользуемых переменных.
+    "noUnusedLocals": false,
+
+    // Предупреждает о неиспользуемых параметрах функции.
+    "noUnusedParameters": false
+  },
+  // Исключает из компиляции ненужные файлы и папки.
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
+
+  // Включает только исходный код для компиляции.
+  "include": ["src/**/*"]
 }

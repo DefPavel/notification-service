@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { KafkaConnection } from './configs/kafka.config';
+import { KafkaConfigProvider } from './config/kafka.config';
+import { NotificationsController } from './notifications/notifications.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true })],
-  providers: [KafkaConnection],
+  providers: [KafkaConfigProvider],
+  controllers: [NotificationsController],
 })
 export class AppModule {}
