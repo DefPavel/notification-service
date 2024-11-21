@@ -1,8 +1,8 @@
 {
   "name": "gateway",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "gateway notification (nest + kafkajs)",
+  "author": "DefPavel",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
