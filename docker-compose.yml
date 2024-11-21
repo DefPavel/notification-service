@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_CLIENT_PORT:-2181}
+    ports:
+      - '${ZOOKEEPER_CLIENT_PORT:-2181}:${ZOOKEEPER_CLIENT_PORT:-2181}'
+    networks:
+      - kafka_network
+
+  kafka:
+    image: confluentinc/cp-kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_CLIENT_PORT:-2181}
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_ADVERTISED_HOST:-localhost}:${KAFKA_ADVERTISED_PORT:-9092}
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: ${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR:-1}
+    ports:
+      - '${KAFKA_ADVERTISED_PORT:-9092}:${KAFKA_ADVERTISED_PORT:-9092}'
+    networks:
+      - kafka_network
+
+  # 1 gateway application
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    environment:
+      KAFKA_BROKER: ${KAFKA_BROKER:-kafka:9092}
+      KAFKA_GROUP_ID: ${KAFKA_GATEWAY_GROUP_ID:-gateway-group}
+      PORT: ${GATEWAY_PORT:-3000}
+    ports:
+      - '${GATEWAY_PORT:-3000}:${GATEWAY_PORT:-3000}'
+    depends_on:
+      - kafka
+    volumes:
+      - './gateway:/var/www/gateway'
+    networks:
+      - kafka_network
+
+  # 2 micro-service
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    container_name: worker
+    environment:
+      KAFKA_BROKER: ${KAFKA_BROKER:-kafka:9092}
+      KAFKA_GROUP_ID: ${KAFKA_WORKER_GROUP_ID:-worker-group}
+    depends_on:
+      - kafka
+    volumes:
+      - './worker:/var/www/worker'
+    networks:
+      - kafka_network
+
+networks:
+  kafka_network:
+    driver: bridge
