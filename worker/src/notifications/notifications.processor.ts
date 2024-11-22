@@ -9,8 +9,9 @@ export class NotificationsProcessor {
   constructor(private readonly notificationService: NotificationsService) {}
 
   @MessagePattern('notification-topic')
-  async processNotification(@Payload() message: { value: NotificationDto }) {
-    const { email, message: content } = message.value;
+  async processNotification(@Payload() data: NotificationDto) {
+    const { email, message: content } = data;
     await this.notificationService.sendEmailWithRetry(email, content);
+    return { status: 'success' };
   }
 }

@@ -25,7 +25,7 @@ services:
       - KAFKA_LISTENERS=PLAINTEXT://:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_CLIENT_PORT:-2181}
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${KAFKA_ADVERTISED_HOST:-kafka}:${KAFKA_ADVERTISED_PORT:-9092}
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${KAFKA_BROKER:-kafka:9092}
       - ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL=0
     ports:
       - '${KAFKA_ADVERTISED_PORT:-9092}:${KAFKA_ADVERTISED_PORT:-9092}'
@@ -37,9 +37,9 @@ services:
       dockerfile: Dockerfile
     container_name: gateway
     environment:
-      KAFKA_BROKER: ${KAFKA_BROKER:-kafka:9092}
-      KAFKA_GROUP_ID: ${KAFKA_GATEWAY_GROUP_ID:-gateway-group}
-      PORT: ${GATEWAY_PORT:-3000}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_GROUP_ID=${KAFKA_GATEWAY_GROUP_ID:-gateway-group}
+      - GATEWAY_PORT=${GATEWAY_PORT:-3000}
     ports:
       - '${GATEWAY_PORT:-3000}:${GATEWAY_PORT:-3000}'
     depends_on:
@@ -56,8 +56,10 @@ services:
       dockerfile: Dockerfile
     container_name: worker
     environment:
-      KAFKA_BROKER: ${KAFKA_BROKER:-kafka:9092}
-      KAFKA_GROUP_ID: ${KAFKA_WORKER_GROUP_ID:-worker-group}
+      - KAFKA_BROKER=${KAFKA_BROKER:-kafka:9092}
+      - KAFKA_GROUP_ID=${KAFKA_WORKER_GROUP_ID:-worker-group}
+      - EMAIL_USER=${EMAIL_USER:-email@gmail.com}
+      - EMAIL_PASS=${EMAIL_PASS:-password-gmail}
     depends_on:
       - kafka
     volumes:

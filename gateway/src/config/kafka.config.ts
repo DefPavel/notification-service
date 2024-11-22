@@ -4,16 +4,12 @@ import { Partitioners } from 'kafkajs';
 
 import { CONNECTED_TOKENS } from '../common/constant';
 
-/**
- * Провайдер для подключения к Kafka.
- */
 export const KafkaConfigProvider = {
+  name: CONNECTED_TOKENS.KafkaConnect, // Указываем имя клиента
   provide: CONNECTED_TOKENS.KafkaConnect,
-  useFactory: (configService: ConfigService): KafkaOptions => {
+  useFactory: async (configService: ConfigService): Promise<KafkaOptions> => {
     const brokers = configService.get<string>('KAFKA_BROKER', 'localhost:9092').split(',');
     const groupId = configService.get<string>('KAFKA_GROUP_ID', 'default-group');
-
-    // console.log(brokers, groupId);
 
     return {
       transport: Transport.KAFKA,
@@ -21,14 +17,14 @@ export const KafkaConfigProvider = {
         client: {
           brokers,
           retry: {
-            retries: 5, // Количество попыток переподключения
-            initialRetryTime: 300, // Начальное время до первой попытки
-            maxRetryTime: 30000, // Максимальное время попыток
+            retries: 5,
+            initialRetryTime: 300,
+            maxRetryTime: 30000,
           },
         },
         consumer: {
           groupId,
-          heartbeatInterval: 5000, // Интервал отправки heartbeat сообщений
+          heartbeatInterval: 5000,
         },
         producer: {
           createPartitioner: Partitioners.LegacyPartitioner,
