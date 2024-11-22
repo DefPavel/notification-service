@@ -13,7 +13,7 @@ export const KafkaConfigProvider = {
     const brokers = configService.get<string>('KAFKA_BROKER', 'localhost:9092').split(',');
     const groupId = configService.get<string>('KAFKA_GROUP_ID', 'default-group');
 
-    console.log(brokers, groupId);
+    // console.log(brokers, groupId);
 
     return {
       transport: Transport.KAFKA,

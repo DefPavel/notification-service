@@ -1,10 +1,11 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
 
 import { AppModule } from './app.module';
 import { CONNECTED_TOKENS } from './common/constant';
+import { CustomValidationPipe } from './common/pipes/validation.pipe';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -21,7 +22,7 @@ async function bootstrap() {
     methods: ['POST'],
     credentials: true,
   });
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new CustomValidationPipe());
 
   app.setGlobalPrefix('api/v1');
   app.connectMicroservice(kafkaConfig);

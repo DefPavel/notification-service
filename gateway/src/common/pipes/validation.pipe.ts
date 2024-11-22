@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 
 @Injectable()
-export class ValidationPipe extends BaseValidationPipe implements PipeTransform {
+export class CustomValidationPipe extends BaseValidationPipe implements PipeTransform {
   constructor() {
     super({
       transform: true,
