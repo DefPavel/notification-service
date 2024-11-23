@@ -11,3 +11,28 @@
 - Поддержка повторных попыток при отправке email с помощью `nodemailer`.
 
 ---
+
+## Установка
+
+### Шаги установки
+
+1. Клонируйте репозиторий:
+
+```bash
+git clone https://github.com/DefPavel/notification-service.git
+cd notification-service
+```
+
+2. Установить зависимости:
+
+```bash
+npm i
+```
+
+3. Запуск:
+
+```bash
+docker compose up --build -d
+```
+
+---
