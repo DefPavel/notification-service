@@ -21,11 +21,9 @@ export class NotificationsController implements OnModuleInit, OnModuleDestroy {
 
   @Post('send')
   async sendNotification(@Body() data: NotificationDto): Promise<{ status: string }> {
-    const response = await this.kafkaClient
-      .emit('notification-topic', { value: JSON.stringify(data) })
-      .toPromise();
-    console.log(response);
-
+    this.kafkaClient.emit('notification-topic', {
+      value: JSON.stringify(data),
+    });
     return { status: 'Notification queued' };
   }
 }
